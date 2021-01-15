@@ -3,6 +3,7 @@ class Var:
 
 
 def file_reader_generator(file):
+    while True:
         line = file.readline()  # Read the line
         if not line:  # We say if all
             return StopIteration

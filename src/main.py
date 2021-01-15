@@ -17,7 +17,6 @@ for file_name in dir_reader:  # We get the canonical file name that matches our 
         for record in record_reader:  # Getting the correct string
             researches.append(research.Research(
                 record))  # We write the string of this study to our class and it to the list of studies
-
 all_machine = []  # To record the names of all machines
 for res in researches:  # We collect names for all studies
     if res.machine not in all_machine:

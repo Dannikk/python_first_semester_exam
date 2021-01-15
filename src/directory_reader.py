@@ -10,20 +10,21 @@ class Var:
 def print_iter(reader):  # a function decorator
     @functools.wraps(reader)
     def dir_reader_decorator(*args, **kwargs):  # The class that will contain the wrapped class
-        #print("init")
+        # print("init")
         inner_reader = reader(*args, **kwargs)
-        #print(type(inner_reader))
+        # print(type(inner_reader))
         for result in inner_reader:
             print(result)
             yield result
+
     return dir_reader_decorator
 
 
 @print_iter
 def DirReader(dir):  # To read files in a directory
     walk = os.walk(dir)
-    for root,dirs,files in walk:
-    #root, dirs, files = next(walk)
+    for root, dirs, files in walk:
+        # root, dirs, files = next(walk)
         if files:
             for file in files:
                 if file.split('.')[
