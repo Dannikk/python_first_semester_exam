@@ -19,7 +19,7 @@ def print_iter(reader):  # a function decorator
 
 
 @print_iter
-class DirReader:  # To read files in a directory
+class DirReader:  # To read files in a directoryy
     def __init__(self, dir):
         self.walk = os.walk(dir)
 
