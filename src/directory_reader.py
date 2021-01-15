@@ -1,4 +1,11 @@
 import os
+
+
+class Var:
+    format_position_in_split = -1
+    format_req = 'txt'
+
+
 def print_iter(reader):  # a function decorator
     class false_class:  # The class that will contain the wrapped class
         def __init__(self, *args, **kwargs):
@@ -29,7 +36,7 @@ class DirReader:  # To read files in a directory
             files = self.files_remaining
         if len(files) > 0:  #
             for file in files:
-                if file.split('.')[-1] == 'txt':  # If the file matches the format we need
+                if file.split('.')[Var.format_position_in_split] == Var.format_req:  # If the file matches the format we need
                     self.files_remaining = files[files.index(file) + 1:]  # We remember the remaining files
                     return root + "\\" + file  # giving the canonical path
         return next(self)

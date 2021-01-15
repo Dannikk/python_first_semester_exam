@@ -1,9 +1,13 @@
+class Var:
+    seq_pos_in_line = 5
+
+
 def file_reader_generator(file):
     while True:
         line = file.readline()  # Read the line
         if not line:  # We say if all
             return StopIteration
-        seq = line.split()[5]  # Look at the consistency
+        seq = line.split()[Var.seq_pos_in_line]  # Look at the consistency
         if seq.count(seq[0]) == len(seq):  # If it consists of repeated characters we return the string
             yield line
 
