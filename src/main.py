@@ -10,7 +10,8 @@ from src import directory_reader as dir_read
 path = input()  # Getting our way
 
 researches = []  # To record studies that satisfy us
-for file_name in dir_read.DirReader(path):  # We get the canonical file name that matches our conditions
+dir_reader = dir_read.DirReader(path)
+for file_name in dir_reader:  # We get the canonical file name that matches our conditions
     with fr.FileReader(
             file_name) as record_reader:  # With the help of our generator, which will give us the correct lines
         for record in record_reader:  # Getting the correct string
