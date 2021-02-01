@@ -6,46 +6,73 @@ from src import directory_reader as dir_read
 # ID	Name	Hour(hour)	Machine	Seq
 # 0	Petr Mazeev	16	IDSSA1	GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
 
+PATH_TO_RESULT = "result.txt"
+LINE_DELIMITER = "\n"
 
-path = input()  # Getting our way
 
-researches = []  # To record studies that satisfy us
-dir_reader = dir_read.DirReader(path)
-for file_name in dir_reader:  # We get the canonical file name that matches our conditions
-    with fr.FileReader(
-            file_name) as record_reader:  # With the help of our generator, which will give us the correct lines
-        for record in record_reader:  # Getting the correct string
-            researches.append(research.Research(
-                record))  # We write the string of this study to our class and it to the list of studies
-all_machine = []  # To record the names of all machines
-for res in researches:  # We collect names for all studies
-    if res.machine not in all_machine:
-        all_machine.append(res.machine)
+def read_researches(dir_path):
+    researches = []
+    dir_reader = dir_read.DirReader(dir_path)
+    for file_name in dir_reader:
+        with fr.FileReader(file_name) as record_reader:
+            for record in record_reader:
+                researches.append(research.Research(record))
+    return researches
 
-max_research_hour_for_machine = []  # To record the result
-for mach in all_machine:  # For all cars
-    how_many_research_hour = {}  # Creating a dictionary for counting
-    for res in researches:  # For all studies
-        if res.machine == mach:  # on this machine
-            old = how_many_research_hour.get(res.hour, 0)  # We get how many have already counted this hour
-            how_many_research_hour[res.hour] = old + 1  # Increase by 1
-    max_key = max(how_many_research_hour,
-                  key=lambda k: how_many_research_hour[k])  # From the dictionary, we get the hour that is the busiest
-    max_research_hour_for_machine.append([mach, max_key])
-    how_many_research_hour.clear()  # Clearing the dictionary
 
-with open("result.txt", "w") as file_output:  # Open the file to display information about the machines
-    for elem in max_research_hour_for_machine:
-        file_output.write("Name:" + elem[0] + " Hours:" + elem[1] + "\n")
+def get_unique_machines(researches):
+    return set(research.machine for research in researches)  # To record the names of all machines
+    # or
+    # unique_machines = set()
+    # for research in researches:
+    #     unique_machines.add(research.machine)
+    # return unique_machines
 
-all_researchers = []
-for res in researches:  # We collect the names of all researchers
-    if res.machine not in all_researchers:
-        all_researchers.append(res.full_name)
 
-for person in all_researchers:  # For all researchers, we create a file and write all the information about their
-    # research into it
-    with open("researcher_data" + "\\" + person + ".txt", "w") as file_output:
-        for res in researches:
-            if res.full_name == person:
-                file_output.write(res.machine + " " + res.hour + " " + res.seq + "\n")
+def get_unique_scientist_name(researches):
+    return set(research.full_name for research in researches)
+    # unique_scientists = set()
+    # for research in researches:
+    #     unique_scientists.add(research.full_name)
+    # return unique_scientists
+
+
+def get_max_research_hour_for_machine(machines, researches):
+    max_research_hour_for_machine = []  # To record the result
+    for machine in machines:
+        researches_per_hour = {}  # Creating a dictionary for counting
+        for research in researches:
+            if research.machine == machine:  # on this machine
+                count_researches = researches_per_hour.get(research.hour, 0)  # We get how many have already counted this hour
+                researches_per_hour[research.hour] = count_researches + 1  # Increase by 1
+        max_researches_per_hour = max(researches_per_hour, key=lambda k: researches_per_hour[k])  # From the dictionary, we get the hour that is the busiest
+        max_research_hour_for_machine.append([machine, max_researches_per_hour])
+    return max_research_hour_for_machine
+
+
+def write_result(file_name, max_research_hour_for_machine):
+    with open(file_name, "w") as file_output:  # Open the file to display information about the machines
+        for name, hours in max_research_hour_for_machine:
+            file_output.write("Name:" + name + " Hours:" + hours + LINE_DELIMITER)
+
+
+def write_researches_per_scientist(all_researchers, researches, dir_to_save="researcher_data"):
+    for researcher in all_researchers:  # For all researchers, we create a file and write all the information about their
+        # research into it
+        with open(dir_to_save + "\\" + researcher + ".txt", "w") as file_output:
+            for res in researches:
+                if res.full_name == researcher:
+                    file_output.write(res.machine + " " + res.hour + " " + res.seq + LINE_DELIMITER)
+
+
+def main():
+    dir_path = input()
+    researches = read_researches(dir_path)
+    unique_machines = get_unique_machines(researches)
+    max_research_hour_for_machine = get_max_research_hour_for_machine(unique_machines, researches)
+    unique_scientist_names = get_unique_scientist_name(researches)
+    write_result(PATH_TO_RESULT, max_research_hour_for_machine)
+    write_researches_per_scientist(unique_scientist_names, researches)
+
+
+main()
