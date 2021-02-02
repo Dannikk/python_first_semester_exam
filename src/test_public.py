@@ -1,6 +1,6 @@
 import sys
 import unittest
-from . import directory_reader as d_r
+from src import directory_reader as d_r
 
 
 
