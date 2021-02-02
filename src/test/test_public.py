@@ -1,8 +1,8 @@
 import sys
-
 sys.path.insert(0, '../src')
 import unittest
 from src import directory_reader as d_r
+
 
 
 class TestF(unittest.TestCase):
