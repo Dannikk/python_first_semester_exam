@@ -1,6 +1,5 @@
 import sys
 import unittest
-#from src import directory_reader as d_r
 from .directory_reader import DirReader
 
 class TestF(unittest.TestCase):
