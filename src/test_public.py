@@ -2,7 +2,7 @@ import os
 import sys
 import unittest
 
-import src.directory_reader as d_r
+from src import directory_reader as d_r
 
 
 class TestF(unittest.TestCase):
